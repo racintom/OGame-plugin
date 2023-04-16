@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2017",
+    "sourceMap": true,
+    "outDir": "dist/js",
+    "noEmitOnError": true,
+    "typeRoots": [ "./node_modules/@types", "./src/global.d.ts" ],
+    "noEmit": false,
+    "moduleResolution": "node16"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "paths": {
+    "*": ["./src/*.d.ts"]
+  }
+}

@@ -1,0 +1,11 @@
+.possible_build_start {
+    display: none !important;
+}
+
+.extension-red {
+    color: #d43635 !important;
+}
+
+.costs .resource {
+    width: auto !important;
+}

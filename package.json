@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "npx tsc && cp manifest.json dist/js && cp ext-stylesheet.css dist/js && cp icon128.png dist/js"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

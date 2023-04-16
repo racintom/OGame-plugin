@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "version": "1.0",
+  "name": "OGame Formatters values",
+  "description": "Tool for OGame",
+  "content_scripts": [
+    {
+      "matches": ["*://*.ogame.gameforge.com/game/*"],
+      "js": ["entry.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "main.js", "main.js.map", "resources.js", "resources.js.map", "utils.js", "utils.js.map", "ext-stylesheet.css", "espionage.js", "espionage.js.amp",
+        "api.js", "api.js.amp", "parser.js", "parser.js.map"
+      ],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "icons": {
+    "128": "icon128.png"
+  }
+}
