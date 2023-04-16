@@ -36,7 +36,7 @@ function formatResourcesInSlideUpContainer() {
         return
     }
     container.querySelectorAll('.resource').forEach(formatResources)
-}git remote add origin https://github.com/racintom/OGame-plugin.git
+}
 
 
 function formatResources(element: Element) {
