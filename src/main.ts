@@ -24,9 +24,9 @@ import {
         observerCurrentResources.observe(currentResources, { attributes: false, childList: true, subtree: true })
     }
 
-    await loadFavoriteEspionagePlayers()
+    const espionageLogs = await loadFavoriteEspionagePlayers()
 
     if (document.getElementById('galaxycomponent') !== null) {
-        putEspionageLogsIntoDOM()
+        putEspionageLogsIntoDOM(espionageLogs)
     }
 })()

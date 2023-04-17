@@ -11,8 +11,9 @@ export type Production = {
         energy: Resource
     }
 }
-
-export type EspionageLog = Record<string, EspionageMessage>
+type PlanetRecord = Record<string, EspionageMessage>
+type SystemRecord = Record<string, PlanetRecord>
+export type EspionageLog = Record<string, SystemRecord>
 
 export type EspionageMessage = {
     playerName: string

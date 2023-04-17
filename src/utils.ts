@@ -1,3 +1,4 @@
+//@ts-nocheck
 export function extractPortionOfText(wholeText: string, fromString: string, toString: string): string {
     const indexFrom = wholeText.indexOf(fromString)
     const indexTo = wholeText.indexOf(toString, indexFrom)

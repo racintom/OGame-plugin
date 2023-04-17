@@ -9,3 +9,11 @@
 .costs .resource {
     width: auto !important;
 }
+
+#galaxyContent .cellAction {
+    width: 107px !important;
+}
+
+#galaxyContent .cellAction .icon.icon_info {
+    cursor: pointer;
+}
