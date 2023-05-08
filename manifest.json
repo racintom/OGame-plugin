@@ -12,8 +12,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "main.js", "main.js.map", "resources.js", "resources.js.map", "utils.js", "utils.js.map", "ext-stylesheet.css", "espionage.js", "espionage.js.amp",
-        "api.js", "api.js.amp", "parser.js", "parser.js.map"
+        "main.js", "resources.js", "utils.js", "ext-stylesheet.css", "espionage.js",
+        "api.js", "parser.js", "bookmark.js", "planets.js"
       ],
       "matches": ["*://*/*"]
     }

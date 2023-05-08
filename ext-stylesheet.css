@@ -17,3 +17,16 @@
 #galaxyContent .cellAction .icon.icon_info {
     cursor: pointer;
 }
+
+#customTimeNeeded {
+    margin-bottom: 5px !important;
+}
+
+/*
+#planetbarcomponent .smallplanet {
+    height: 69px !important;
+}
+
+#planetbarcomponent .extension-bookmark {
+    padding-top: 33px !important;
+}*/

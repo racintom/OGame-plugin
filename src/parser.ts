@@ -1,13 +1,25 @@
-export function parsePage(page: string): Document {
-    page = stripSpecialCharactersThatFuckUpParsing(page)
-    return new DOMParser().parseFromString(page, "text/xml")
+import {SimplePlanetInfo} from './types'
+
+export function parsePage(page: string): string {
+    return stripSpecialCharactersThatFuckUpParsing(page)
 }
 
 function stripSpecialCharactersThatFuckUpParsing(page: string): string {
-    return page.replace(/Activity([\s\S]*?)minutes ago./gm, '') // todo: If I want to preserve the activity information as well, I have to edit this regex
-        .replace(/\|<<</gm, '<').replace(/>>>\|/gm, '>').replace(/<</gm, '<').replace(/>>/gm, '>')
-        .replace(/icon_apikey([\s\S]*?)><\/span>/gm, '"></span>')
-        .replace(/href="([\s\S]*?)"/gm, '')
+    return page.replace(/Activity([\s\S]*?)minutes ago./gm, '')
         .replace(/<script([\s\S]*?)<\/script>/gm, '')
-        .replace(/<img([\s\S]*?)>/gm, '')
+}
+
+export function parsePlanetListFromAPIXML(text: string, playerId: number): SimplePlanetInfo {
+    const planetsElements = new DOMParser().parseFromString(text,"text/xml").getElementsByTagName('planet')
+    const planets: SimplePlanetInfo = {}
+
+    for (let i = 0 ; i < planetsElements.length ; i++) {
+        planets[playerId] = {
+            planetCoords: planetsElements[i].getAttribute('coords')!,
+            planetId: Number(planetsElements[i].getAttribute('id')),
+            planetName: planetsElements[i].getAttribute('name')!
+        }
+    }
+
+    return planets
 }

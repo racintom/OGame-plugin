@@ -1,6 +1,5 @@
 import {
     loadResourceProductionInSeconds,
-    insertRemainingTimeIntoDOMScript,
     resourceFormattingScript
 } from "./resources.js";
 
@@ -9,24 +8,41 @@ import {
     putEspionageLogsIntoDOM
 } from "./espionage.js"
 
-(async function () {
-    const production = loadResourceProductionInSeconds();
+import {
+    attachBookmarkButton, renderBookmarks
+} from './bookmark.js'
+import {addPlanetListForEachPlayerInGalaxyView} from './planets.js'
 
-    const observerContainer = new MutationObserver((event) => resourceFormattingScript(event, production));
+(async function () {
+    window.bookmarks = {}
+
+    const production = loadResourceProductionInSeconds();
+    // const planetsInfo = await getPlanetsInfo()
+    // const espionageLogs = await loadFavoriteEspionagePlayers()
+
+    const observerSlider = new MutationObserver( (event) => {
+        const container = document.querySelector('.slide-up')
+        if (container != null) {
+            resourceFormattingScript(event, production)
+            // attachBookmarkButton(production, planetsInfo)
+        }
+    });
     const slideUpContainer = document.getElementsByClassName('maincontent')[0]
     if (slideUpContainer) {
-        observerContainer.observe(slideUpContainer, { attributes: false, childList: true, subtree: true });
+        observerSlider.observe(slideUpContainer, { attributes: false, childList: true, subtree: true });
     }
 
-    const observerCurrentResources = new MutationObserver(() => insertRemainingTimeIntoDOMScript(production))
-    const currentResources = document.getElementById('resources')
-    if (currentResources) {
-        observerCurrentResources.observe(currentResources, { attributes: false, childList: true, subtree: true })
+    // renderBookmarks(planetsInfo)
+
+    const observerGalaxy = new MutationObserver( (event) => {
+        if ((event[0].target as HTMLDivElement).style.display === 'none') {
+            // putEspionageLogsIntoDOM(espionageLogs)
+            addPlanetListForEachPlayerInGalaxyView()
+        }
+    });
+    const galaxyContainer = document.getElementById('galaxyLoading')
+    if (galaxyContainer) {
+        observerGalaxy.observe(galaxyContainer, { attributes: true, childList: true, subtree: false });
     }
 
-    const espionageLogs = await loadFavoriteEspionagePlayers()
-
-    if (document.getElementById('galaxycomponent') !== null) {
-        putEspionageLogsIntoDOM(espionageLogs)
-    }
 })()

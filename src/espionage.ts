@@ -1,9 +1,10 @@
-import { call } from "./api.js"
+import {callPost} from "./api.js"
 import { parsePage } from "./parser.js"
 import {EspionageLog, EspionageMessage} from './types'
+import {getTimeConstrainedLocalStorageCache} from './utils.js'
 
 const MESSAGE_ID = -1
-const TAB_ID = 6 //FAVORITES TAB
+const TAB_ID = 20
 const ACTION = 107
 const AJAX = 1
 const STANDALONE_PAGE = 0
@@ -11,16 +12,14 @@ const STANDALONE_PAGE = 0
 type EspionageLogSimple = Record<string, EspionageMessage>
 
 export async function loadFavoriteEspionagePlayers(): Promise<EspionageLog> {
-    //const cachedLogs = localStorage.getItem('espionage-logs')
-    const cachedLogs = null
-    if (cachedLogs === null || areLogsAreTooOld()) {
+    const cache = getTimeConstrainedLocalStorageCache<EspionageLog>('espionage-logs', 'espionage-logs-date')
+    if (cache == null) {
         const accumulatedData = transform(await fetchFavoriteEspionageMessages())
         localStorage.setItem('espionage-logs', JSON.stringify(accumulatedData))
         localStorage.setItem('espionage-logs-date', String(Date.now()))
         return accumulatedData
-    } else {
-        return JSON.parse(localStorage.getItem('espionage-logs')!) as EspionageLog
     }
+    return cache
 }
 
 export function putEspionageLogsIntoDOM(espionageLogs: EspionageLog) {
@@ -45,7 +44,7 @@ async function fetchFavoriteEspionageMessages(): Promise<EspionageLogSimple> {
     let accumulatedData: EspionageLogSimple = {}
     for(let i = 1 ; i > 0 ; i++) {
         const playerData = await fetchAllFavoriteEspionageMessages(i)
-        if (messagesAreDuplicate(Object.values(accumulatedData), Object.values(playerData))) { // this include method is not correct IMHO. Should be improved and tested
+        if (messagesAreDuplicate(Object.values(accumulatedData), Object.values(playerData))) {
             return accumulatedData
         }
         accumulatedData = {...accumulatedData, ...playerData}
@@ -77,37 +76,37 @@ function messagesAreDuplicate(existingMessages: EspionageMessage[], newMessages:
 }
 
 async function fetchAllFavoriteEspionageMessages(pagination: number) {
-    return extractPlayerInfoFromParsedResponse(
-        parsePage(await call("index.php?page=messages&tab=6&ajax=1", {
-            messageId: MESSAGE_ID,
-            tabId: TAB_ID,
-            action: ACTION,
-            pagination,
-            ajax: AJAX,
-            standalonePage: STANDALONE_PAGE,
-        }))
-    )
-
+    const dummyDoc = document.createElement('html')
+    dummyDoc.innerHTML = parsePage(await callPost("game/index.php?page=messages", {
+        messageId: MESSAGE_ID,
+        tabId: TAB_ID,
+        action: ACTION,
+        pagination,
+        ajax: AJAX,
+        standalonePage: STANDALONE_PAGE,
+    }))
+    return extractPlayerInfoFromParsedResponse(dummyDoc)
 }
 
-function extractPlayerInfoFromParsedResponse(dom: Document): EspionageLogSimple {
+function extractPlayerInfoFromParsedResponse(dom: HTMLHtmlElement): EspionageLogSimple {
     const messages: EspionageLogSimple = {}
     const domMessages = dom.querySelectorAll('.msg')
     domMessages.forEach(message => {
-        const [planetName, coordinates] = message.querySelector('.msg_title figure')!.nextSibling!.textContent!.split(' ')!
-        const playerName = message.querySelector('.msg_content .status_abbr_active, .msg_content .compacting > .status_abbr_honorableTarget')!.textContent!.trim()
+        const planetNameContainer = message.querySelector('.msg_title figure')
+        if (planetNameContainer == null) {  // account is deactivated
+            return
+        }
+        const [planetName, coordinates] = extractPlanetNameAndCoords(planetNameContainer.nextSibling!.textContent!)
+        const playerNameContainer = message.querySelector('.msg_content .status_abbr_active, .msg_content .compacting > .status_abbr_honorableTarget, .msg_content .compacting > .status_abbr_inactive')
+        if (playerNameContainer == null) {
+            return
+        }
         const date = message.querySelector('.msg_date.fright')!.textContent!
         const resources: EspionageMessage['resources'] = []
         message.querySelectorAll('.msg_content .compacting:nth-last-child(-n+3) .ctn.ctn4').forEach(resource => resources.push(resource.textContent!))
-        messages[coordinates] = { date, playerName, coordinates, planetName, resources }
+        messages[coordinates] = { date, playerName: playerNameContainer.textContent!.trim(), coordinates, planetName, resources }
     })
     return messages
-}
-
-function areLogsAreTooOld(): boolean {
-    const halfMinuteThreshHold = 30 * 1000;
-    const savedTime = Number(localStorage.getItem('espionage-logs-date'))
-    return (Date.now() - savedTime) > halfMinuteThreshHold
 }
 
 function generateHTMLForEspionageMessage(data: EspionageMessage): HTMLSpanElement {
@@ -155,4 +154,11 @@ function constructTooltipHTML() {
 
 
     return { tooltip, textContainerInsideTooltip: child3 }
+}
+
+function extractPlanetNameAndCoords(textContent: string): string[] {
+    const parts = textContent.split(' ')
+    const coords = parts.slice(-1)[0]
+
+    return [parts.slice(0, -1).join(), coords]
 }

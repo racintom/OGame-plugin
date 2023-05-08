@@ -1,3 +1,5 @@
+import {PlayerInfo} from './types'
+
 export {}
 
 declare global {
@@ -9,6 +11,8 @@ declare global {
 
     interface Window {
         token: string
+        player: PlayerInfo
+        bookmarks: Record<string, number>
     }
 }
 
