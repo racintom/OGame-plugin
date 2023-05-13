@@ -7,6 +7,10 @@ export function extractPortionOfText(wholeText: string, fromString: string, toSt
     return wholeText.substring(indexFrom + fromString.length, indexTo)
 }
 
+export function addThousandSeparatorsToNumber(number: number): string {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function removeCommasFromText(text: string): number {
     if (text.includes('Mn')) {
         return Number(text.replace(/Mn/gm, '')) * 1000000
@@ -48,8 +52,7 @@ export function calculateSecondsTillAchievablePrice(currentAmount: number, neede
     return Math.ceil((neededAmount - currentAmount)/resourceProducedInSingleSecond)
 }
 
-export function calculateTimeTillEnoughResources(production: Production,
-                                                 { metal: metalCost, crystal: crystalCost, deuterium: deuteriumCost }: ResourceAmount,
+export function calculateTimeTillEnoughResources({ metal: metalCost, crystal: crystalCost, deuterium: deuteriumCost }: ResourceAmount,
                                                  { metal: currentMetal, crystal: currentCrystal, deuterium: currentDeuterium }: ResourceAmount
                                                  ): number {
     if (resourcesAreAlreadyHarvestedAndDOMIsStale(
@@ -66,19 +69,19 @@ export function calculateTimeTillEnoughResources(production: Production,
     const timeNeededForMetal = calculateSecondsTillAchievablePrice(
         currentMetal,
         metalCost,
-        production.resources.metal.production
+        window.resourcesBar.resources.metal.production
     )
 
     const timeNeededForCrystal = calculateSecondsTillAchievablePrice(
         currentCrystal,
         crystalCost,
-        production.resources.crystal.production
+        window.resourcesBar.resources.crystal.production
     )
 
     const timeNeededForDeuterium = calculateSecondsTillAchievablePrice(
         currentDeuterium,
         deuteriumCost,
-        production.resources.deuterium.production
+        window.resourcesBar.resources.deuterium.production
     )
 
     return Math.max(timeNeededForMetal, timeNeededForCrystal, timeNeededForDeuterium)

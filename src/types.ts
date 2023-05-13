@@ -1,5 +1,6 @@
 export type Resource = {
     production: number
+    amount: number
 }
 
 export type ResourceAmount = {
@@ -18,18 +19,6 @@ export type Production = {
 export type ProductionWithEnergy = Production & { resources : {
         energy: Resource & { amount: number }
     }
-}
-
-type PlanetRecord = Record<string, EspionageMessage>
-type SystemRecord = Record<string, PlanetRecord>
-export type EspionageLog = Record<string, SystemRecord>
-
-export type EspionageMessage = {
-    playerName: string
-    planetName: string
-    date: string,
-    resources: string[]
-    coordinates: string
 }
 
 export type Bookmarks = Record<string, BookmarkData | undefined>
@@ -58,6 +47,25 @@ export type PlanetInfo = {
     planetId: number
 } & ResourceAmount
 
-export type SimplePlanetInfo = Record<string, { planetName: string ; planetId: number ; planetCoords: string }>
+export type SimplePlanetInfo = Record<string, { planetName: string ; planetCoords: string }>
 
 export type PlanetsInfo = Record<string, PlanetInfo>
+
+export type ShipInfo = {
+    baseCargoCapacity: number
+    baseFuelCapacity: number
+    baseFuelConsumption: number
+    baseSpeed: number
+    cargoCapacity: number
+    fuelCapacity: number
+    fuelConsumption: number
+    id: number
+    name: string
+    number: number
+    recycleMode: number
+    speed: number
+}
+
+export type ResourcesBar = {
+    onClickActive: boolean
+} & ProductionWithEnergy

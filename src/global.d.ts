@@ -1,4 +1,4 @@
-import {PlayerInfo} from './types'
+import {PlayerInfo, ResourcesBar, ShipInfo} from './types'
 
 export {}
 
@@ -13,6 +13,8 @@ declare global {
         token: string
         player: PlayerInfo
         bookmarks: Record<string, number>
+        shipsData: Record<string, ShipInfo>
+        resourcesBar: ResourcesBar
     }
 }
 

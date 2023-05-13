@@ -6,26 +6,21 @@ import {
 } from './utils.js'
 import {Production, ProductionWithEnergy, ResourceAmount} from './types'
 
-export function resourceFormattingScript(event: MutationRecord[], production: ProductionWithEnergy) {
+export function resourceFormattingScript(event: MutationRecord[]) {
     if (event.find(ev => (ev.target as Element).classList.contains('insufficient'))) {
-        updateTimeNeededForUpgrade(production)
+        updateTimeNeededForUpgrade()
     }
     formatResourcesInSlideUpContainer()
-    makeEnergyCostRedIfCurrentEnergyWouldNotSuffice(production.resources.energy.amount)
+    makeEnergyCostRedIfCurrentEnergyWouldNotSuffice(window.resourcesBar.resources.energy.amount)
 }
 
-function updateTimeNeededForUpgrade(production: Production): void {
+function updateTimeNeededForUpgrade(): void {
     const insufficientResources = document.querySelector('.slide-up .costs .insufficient:not(.population.resource)')
     if (insufficientResources === null) {
         return
     }
-    const remainingTimeInSeconds = calculateTimeTillEnoughResources(production, findCostsInDOM(), getCurrentResourcesAmount())
+    const remainingTimeInSeconds = calculateTimeTillEnoughResources(findCostsInDOM(), getCurrentResourcesAmount())
     inserIntoDOMRemainingTime(remainingTimeInSeconds)
-}
-
-export function loadResourceProductionInSeconds(): ProductionWithEnergy {
-    const text = document.getElementById('resourcesbarcomponent')?.children[1]?.textContent?.trim()!
-    return JSON.parse(extractPortionOfText(text, 'reloadResources(', ')'))
 }
 
 export function findCostsInDOM(): ResourceAmount {

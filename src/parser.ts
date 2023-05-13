@@ -14,11 +14,11 @@ export function parsePlanetListFromAPIXML(text: string, playerId: number): Simpl
     const planets: SimplePlanetInfo = {}
 
     for (let i = 0 ; i < planetsElements.length ; i++) {
-        planets[playerId] = {
+        const info = {
             planetCoords: planetsElements[i].getAttribute('coords')!,
-            planetId: Number(planetsElements[i].getAttribute('id')),
             planetName: planetsElements[i].getAttribute('name')!
         }
+        planets[info.planetCoords] = info
     }
 
     return planets
