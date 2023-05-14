@@ -7,7 +7,6 @@ export function renderCargoCapacityForSelectedAmountOfShipsInputChange(event: Ev
     )
 }
 export function renderCargoCapacityForSelectedAmountOfShipsPictureClicked(event: Event): void {
-    console.log('picture clicked method')
     renderCargoText(
         calculateMaximumCargoCapacity(Number(((event.target as HTMLSpanElement).nextElementSibling as HTMLInputElement).value), Number((event.target as HTMLSpanElement).parentElement!.dataset.technology)),
         (event.target as HTMLInputElement).parentElement as HTMLSpanElement
@@ -26,12 +25,22 @@ export function attachNecessaryMaxButton(el: HTMLSpanElement): void {
     el.appendChild(node)
 
     node.addEventListener('click', (e) => {
-        e.stopPropagation()
-        const shipsToSend = calculateHowManyShipsCanCarryAllCurrentResources(Number((e.target as HTMLSpanElement).parentElement!.parentElement!.parentElement!.dataset.technology));
+        e.stopPropagation();
+
+        const shipId = Number((e.target as HTMLSpanElement).parentElement!.parentElement!.parentElement!.dataset.technology)
+        const shipsToSend = calculateHowManyShipsCanCarryAllCurrentResources(shipId);
         const inputElement = (e.target as HTMLSpanElement).parentElement!.parentElement!.nextElementSibling as HTMLInputElement
         inputElement.value = shipsToSend + ''
         renderCargoCapacityForSelectedAmountOfShipsInputChange({ target: inputElement } as any)
+
+        inputElement.click()
+        inputElement.focus()
+        inputElement.blur()
     })
+}
+
+export function removeAllCargoLabels(): void {
+    document.querySelectorAll('.extension-total-cargo').forEach(el => el.textContent = '')
 }
 
 function renderCargoText(totalCargo: number, container: HTMLSpanElement): void {
@@ -51,7 +60,9 @@ function renderCargoText(totalCargo: number, container: HTMLSpanElement): void {
 
 
 function calculateHowManyShipsCanCarryAllCurrentResources(shipId: number): number {
-    return Math.ceil((window.resourcesBar.resources.metal.amount + window.resourcesBar.resources.crystal.amount + window.resourcesBar.resources.deuterium.amount) / window.shipsData[shipId].cargoCapacity)
+    const neededShips = (window.resourcesBar.resources.metal.amount + window.resourcesBar.resources.crystal.amount + window.resourcesBar.resources.deuterium.amount) / window.shipsData[shipId].cargoCapacity
+    const availableShips = window.shipsOnPlanet.find(ship => ship.id === shipId)!.number
+    return Math.ceil(neededShips < availableShips ? neededShips : availableShips)
 }
 
 function calculateMaximumCargoCapacity(amountOfSelectedShips: number, shipId: number): number {

@@ -7,7 +7,7 @@ import {
 } from "./galaxy.js"
 import {
     renderCargoCapacityForSelectedAmountOfShipsPictureClicked,
-    renderCargoCapacityForSelectedAmountOfShipsInputChange, attachNecessaryMaxButton
+    renderCargoCapacityForSelectedAmountOfShipsInputChange, attachNecessaryMaxButton, removeAllCargoLabels
 } from './shipyard.js'
 
 
@@ -40,8 +40,14 @@ import {
         document.querySelectorAll('#shipsChosen input').forEach(el => el.addEventListener('input', event => setTimeout(() => renderCargoCapacityForSelectedAmountOfShipsInputChange(event), 20)))
         document.querySelectorAll('#shipsChosen .icon').forEach(el => {
             el.addEventListener('click', event => setTimeout(() => renderCargoCapacityForSelectedAmountOfShipsPictureClicked(event), 20))
-            attachNecessaryMaxButton(el as HTMLSpanElement)
+
+            if (el.classList.contains('transporterSmall') || el.classList.contains('transporterLarge')) {
+                attachNecessaryMaxButton(el as HTMLSpanElement)
+            }
         })
-    }// todo: add button to shipyard images to use only as necessary transporters
+        document.getElementById('resetall')!.addEventListener('click', () => {
+            removeAllCargoLabels()
+        })
+    }
 
 })()

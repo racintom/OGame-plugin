@@ -61,9 +61,12 @@ export type ShipInfo = {
     fuelConsumption: number
     id: number
     name: string
-    number: number
     recycleMode: number
     speed: number
+}
+
+export type AvailableShip = ShipInfo & {
+    number: number
 }
 
 export type ResourcesBar = {

@@ -1,4 +1,4 @@
-import {PlayerInfo, ResourcesBar, ShipInfo} from './types'
+import type {AvailableShip, PlayerInfo, ResourcesBar, ShipInfo} from './types'
 
 export {}
 
@@ -14,7 +14,9 @@ declare global {
         player: PlayerInfo
         bookmarks: Record<string, number>
         shipsData: Record<string, ShipInfo>
+        shipsOnPlanet: AvailableShip[]
         resourcesBar: ResourcesBar
+        shipsToSend: { id: number ; number: number}[]
     }
 }
 
