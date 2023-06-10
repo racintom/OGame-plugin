@@ -11,7 +11,7 @@
 }
 
 #galaxyContent .cellAction {
-    width: 107px !important;
+    width: 135px !important;
 }
 
 #galaxyContent .cellAction .icon.icon_info {
@@ -57,5 +57,9 @@
     position: relative;
     bottom: 7px;
     right: 6px;
+}
+
+.galaxyRow.ctContentRow .extension-custom-espionage-send-icon {
+    cursor: pointer;
 }
 

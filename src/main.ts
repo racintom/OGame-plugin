@@ -3,7 +3,7 @@ import {
 } from "./resources.js";
 
 import {
-    addPlanetsToIconTooltipInGalaxyView
+    addPlanetsToIconTooltipInGalaxyView, attachHandlerToSendProbe
 } from "./galaxy.js"
 import {
     renderCargoCapacityForSelectedAmountOfShipsPictureClicked,
@@ -28,6 +28,7 @@ import {
     const observerGalaxy = new MutationObserver( (event) => {
         if ((event[0].target as HTMLDivElement).style.display === 'none') {
             addPlanetsToIconTooltipInGalaxyView()
+            attachHandlerToSendProbe()
         }
     });
     const galaxyContainer = document.getElementById('galaxyLoading')

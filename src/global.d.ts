@@ -17,6 +17,15 @@ declare global {
         shipsOnPlanet: AvailableShip[]
         resourcesBar: ResourcesBar
         shipsToSend: { id: number ; number: number}[]
+        sendShips: (fleetMovementType: number, galaxy: number, system: number, planet: number, _: number, shipCount: number) => void
+        galaxy: number
+        system: number
+        constants: {
+            discover: 18
+            espionage: 6
+            lifeformEnabled: true
+            missleattack: 10
+        }
     }
 }
 
