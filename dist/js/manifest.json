@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "version": "2.0",
+  "name": "OGame Formatters values",
+  "description": "Tool for OGame",
+  "content_scripts": [
+    {
+      "matches": ["*://*.ogame.gameforge.com/game/*"],
+      "js": ["entry.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "main.js", "resources.js", "utils.js", "ext-stylesheet.css", "galaxy.js",
+        "api.js", "parser.js", "planets.js", "shipyard.js"
+      ],
+      "matches": ["*://*/*"]
+    }
+  ],
+  "icons": {
+    "128": "icon128.png"
+  }
+}

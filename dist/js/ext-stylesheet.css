@@ -1,0 +1,65 @@
+.possible_build_start {
+    display: none !important;
+}
+
+.extension-red {
+    color: #d43635 !important;
+}
+
+.costs .resource {
+    width: auto !important;
+}
+
+#galaxyContent .cellAction {
+    width: 135px !important;
+}
+
+#galaxyContent .cellAction .icon.icon_info {
+    cursor: pointer;
+}
+
+#customTimeNeeded {
+    margin-bottom: 5px !important;
+}
+
+.extension-tooltip {
+    padding-top: 15px !important;
+}
+
+.extension-tooltip .close-tooltip {
+    top: 3px !important;
+    right: 3px !important;
+}
+
+#shipsChosen .technology {
+    position: relative;
+}
+
+#shipsChosen .extension-total-cargo {
+    position: absolute;
+    z-index: 99999;
+    top: 3px;
+    right: 3px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#shipsChosen .extension-total-cargo.sufficient {
+    color: #9c0 !important;
+}
+
+#shipsChosen .extension-total-cargo.insufficient {
+    color: #d43635 !important
+}
+
+#shipsChosen .send_all.my-extension {
+    transform: rotate(90deg) scale(0.5);
+    width: 32px;
+    position: relative;
+    bottom: 7px;
+    right: 6px;
+}
+
+.galaxyRow.ctContentRow .extension-custom-espionage-send-icon {
+    cursor: pointer;
+}
+
