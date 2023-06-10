@@ -6,13 +6,33 @@ export function addPlanetsToIconTooltipInGalaxyView(): void {
         const cellActionEl = row.querySelector('.cellAction')!
         const mailIcon = cellActionEl.querySelector<HTMLAnchorElement>('.sendMail')
         if (mailIcon != null) {
-            cellActionEl.appendChild(generateHTMLIcon(await getPlanetsForPlayer(Number(mailIcon.dataset.playerid))))
-            // todo: change this to adding a text to the popup that is displayed when you click on planet in galaxy view
+            cellActionEl.appendChild(generateHTMLIconForAllPlanetsInfo(await getPlanetsForPlayer(Number(mailIcon.dataset.playerid))))
         }
     })
 }
 
-function generateHTMLIcon(data: SimplePlanetInfo): HTMLSpanElement {
+export function attachHandlerToSendProbe(): void {
+    document.querySelectorAll(`.galaxyRow.ctContentRow:not(.empty_filter)`).forEach( async row => {
+        const cellActionEl = row.querySelector('.cellAction')!
+        const mailIcon = cellActionEl.querySelector<HTMLAnchorElement>('.sendMail')
+        if (mailIcon != null) {
+            cellActionEl.appendChild(generateHTMLIconForEspionageWithMoreProbes(Number(row.id.match(/\d+/)![0])))
+        }
+    })
+}
+
+function generateHTMLIconForEspionageWithMoreProbes(planetPosition: number): HTMLSpanElement {
+    const node = document.createElement('span')
+    node.className = 'icon icon_eye hueRotate extension-custom-espionage-send-icon'
+
+    node.onclick = () => {
+        window.sendShips(window.constants.espionage, window.galaxy, window.system, planetPosition, 1, 6)
+    }
+
+    return node
+}
+
+function generateHTMLIconForAllPlanetsInfo(data: SimplePlanetInfo): HTMLSpanElement {
    const { tooltip, textContainerInsideTooltip } = constructTooltipHTML()
 
     Object.values(data).forEach(data => {
