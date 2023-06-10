@@ -36,11 +36,16 @@ function generateHTMLIconForAllPlanetsInfo(data: SimplePlanetInfo): HTMLSpanElem
    const { tooltip, textContainerInsideTooltip } = constructTooltipHTML()
 
     Object.values(data).forEach(data => {
+        const [galaxy, system, planet] = extractPlanetCoordsFromStringifiedPlanetCoords(data.planetCoords)
+
         const div = document.createElement('div')
-        div.textContent = data.planetCoords + '\t' + data.planetName + '\n'
+        const a = document.createElement('a')
+        div.appendChild(a)
+        a.textContent = data.planetCoords + '\t' + data.planetName + '\n'
+        a.href = `${window.location.origin}/game/index.php?page=ingame&component=galaxy&galaxy=${galaxy}&system=${system}&position=${planet}`
+
         textContainerInsideTooltip.appendChild(div)
     })
-
     const node = document.createElement('span')
     node.className = 'icon icon_info'
 
@@ -53,6 +58,10 @@ function generateHTMLIconForAllPlanetsInfo(data: SimplePlanetInfo): HTMLSpanElem
     }
 
     return node
+}
+
+function extractPlanetCoordsFromStringifiedPlanetCoords(coords: string): string[] {
+    return coords.split(':')
 }
 
 function constructTooltipHTML() {
